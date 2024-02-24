@@ -7,9 +7,9 @@ app.get("/", (req, res) => {
   const today = new Date();
   //Test code
   // weekend:
-  // new Date("June 24, 2023 11:13:00");
+  // const day = new Date("June 24, 2023 11:13:00");
   // weekday:
-  // new Date("June 20, 2023 11:13:00");
+  // const day = new Date("June 20, 2023 11:13:00");
   const day = today.getDay();
 
   // console.log(day);
@@ -21,6 +21,7 @@ app.get("/", (req, res) => {
     adv = "it's time to have some fun";
   }
 
+  // render the .ejs file on screen
   res.render("solution.ejs", {
     dayType: type,
     advice: adv,
