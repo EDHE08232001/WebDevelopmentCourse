@@ -10,30 +10,37 @@
 i {
   margin-right: 10px;
 }
+
 /*----------bootstrap-navbar-css------------*/
 .navbar-logo {
   padding: 15px;
   color: #fff;
 }
+
 .navbar-mainbg {
   background-color: #3586ff;
   padding: 0px;
 }
+
 #navbarSupportedContent {
   overflow: hidden;
   position: relative;
 }
+
 #navbarSupportedContent ul {
   padding: 0px;
   margin: 0px;
 }
+
 #navbarSupportedContent ul li a i {
   margin-right: 10px;
 }
+
 #navbarSupportedContent li {
   list-style-type: none;
   float: left;
 }
+
 #navbarSupportedContent ul li a {
   color: rgba(255, 255, 255, 0.5);
   text-decoration: none;
@@ -44,11 +51,13 @@ i {
   transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
   position: relative;
 }
-#navbarSupportedContent > ul > li.active > a {
+
+#navbarSupportedContent>ul>li.active>a {
   color: #3586ff;
   background-color: transparent;
   transition: all 0.7s;
 }
+
 #navbarSupportedContent a:not(:only-child):after {
   content: "\f105";
   position: absolute;
@@ -62,9 +71,11 @@ i {
   font-weight: 900;
   transition: 0.5s;
 }
-#navbarSupportedContent .active > a:not(:only-child):after {
+
+#navbarSupportedContent .active>a:not(:only-child):after {
   transform: rotate(90deg);
 }
+
 .hori-selector {
   display: inline-block;
   position: absolute;
@@ -78,6 +89,7 @@ i {
   border-top-right-radius: 15px;
   margin-top: 10px;
 }
+
 .hori-selector .right,
 .hori-selector .left {
   position: absolute;
@@ -86,12 +98,15 @@ i {
   background-color: #fff;
   bottom: 10px;
 }
+
 .hori-selector .right {
   right: -25px;
 }
+
 .hori-selector .left {
   left: -25px;
 }
+
 .hori-selector .right:before,
 .hori-selector .left:before {
   content: "";
@@ -101,10 +116,12 @@ i {
   border-radius: 50%;
   background-color: #3586ff;
 }
+
 .hori-selector .right:before {
   bottom: 0;
   right: -25px;
 }
+
 .hori-selector .left:before {
   bottom: 0;
   left: -25px;
@@ -117,13 +134,16 @@ i {
     -ms-flex-pack: start;
     justify-content: flex-start;
   }
+
   .navbar-expand-custom .navbar-nav {
     -ms-flex-direction: row;
     flex-direction: row;
   }
+
   .navbar-expand-custom .navbar-toggler {
     display: none;
   }
+
   .navbar-expand-custom .navbar-collapse {
     display: -ms-flexbox !important;
     display: flex !important;
@@ -136,6 +156,7 @@ i {
   #navbarSupportedContent ul li a {
     padding: 12px 30px;
   }
+
   .hori-selector {
     margin-top: 0px;
     margin-left: 10px;
@@ -143,21 +164,26 @@ i {
     border-top-left-radius: 25px;
     border-bottom-left-radius: 25px;
   }
+
   .hori-selector .left,
   .hori-selector .right {
     right: 10px;
   }
+
   .hori-selector .left {
     top: -25px;
     left: auto;
   }
+
   .hori-selector .right {
     bottom: -25px;
   }
+
   .hori-selector .left:before {
     left: -25px;
     top: -25px;
   }
+
   .hori-selector .right:before {
     bottom: -25px;
     left: -25px;
@@ -190,6 +216,7 @@ footer .social_icon li,
 footer .menu li {
   list-style: none;
 }
+
 footer .social_icon li a {
   font-size: 2em;
   color: #ccc;
@@ -197,6 +224,7 @@ footer .social_icon li a {
   display: inline-block;
   transition: 0.5s;
 }
+
 footer .social_icon li a:hover {
   transform: translateY(-15px);
   color: blue;
@@ -211,10 +239,12 @@ footer .menu li a {
   text-decoration: none;
   opacity: 0.75;
 }
+
 footer .menu li a:hover {
   opacity: 1;
   color: #fff;
 }
+
 p {
   color: whtie;
   text-align: center;
@@ -251,6 +281,7 @@ footer .wave#wave2 {
   bottom: 10px;
   animation: animateWave_02 4s linear infinite;
 }
+
 footer .wave#wave3 {
   z-index: 1000;
   opacity: 0.2;
@@ -269,6 +300,7 @@ footer .wave#wave4 {
   0% {
     background-position-x: 1000px;
   }
+
   100% {
     background-position-x: 0px;
   }
@@ -278,6 +310,7 @@ footer .wave#wave4 {
   0% {
     background-position-x: 0px;
   }
+
   100% {
     background-position-x: 1000px;
   }
