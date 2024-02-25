@@ -1,33 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EJS Tags</title>
+  <title>EJS Tags</title> <!-- This sets the page title, visible in the browser tab -->
 </head>
-
 <body>
   <h1>
-    <!-- Tite goes here -->
+    <!-- This will dynamically insert the value of the "title" variable into the H1 tag -->
+    <%= title %>
   </h1>
   <p>Current second:
-    <!-- Current second goes here -->
+    <!-- Dynamically inserts the current second. Please note there was a syntax error in your original code which I corrected below -->
+    <%= seconds %>
   </p>
-  if (seconds % 2===0) {
+  <!-- Conditional statement in EJS to check if the current second is even -->
+  <% if (seconds % 2 === 0) { %>
   <ul>
-    <!-- List goes here if current second is even. -->
-    <!-- Otherwise it should display the following: -->
-    <!-- <p>No items to display</p> -->
+    <!-- Iterates over "items" array and displays each fruit in a list if the current second is even -->
+    <% items.forEach((fruit) => { %>
+      <li><%= fruit %></li> <!-- Displays the fruit name -->
+    <% }); %>
   </ul>
-  } else {
-  <p>No items to display</p>
-  }
+  <% } else { %>
+    <!-- This is displayed if the current second is not even -->
+    <p>No items to display</p>
+  <% } %>
   <p>
-    <!-- HTML content goes here -->
+    <!-- Inserts HTML content directly into the template, allowing for HTML markup within the variable -->
+    <%- htmlContent %>
   </p>
 
-  <!-- Footer goes here -->
+  <!-- Includes the footer.ejs file here to be part of the HTML structure -->
+  <%- include("footer.ejs") %>
 </body>
-
 </html>
