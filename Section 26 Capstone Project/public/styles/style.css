@@ -1,3 +1,16 @@
+body {
+    padding-top: 60px;
+    /* Adjust based on the actual height of your header */
+    padding-bottom: 60px;
+    /* Adjust based on the actual height of your footer */
+}
+
+#posts {
+    margin-top: 20px;
+    /* Additional spacing if needed */
+}
+
+/* Existing styles */
 .logo-text {
     position: relative;
     left: 5px;
@@ -8,6 +21,8 @@
     top: 0;
     left: 0;
     width: 100%;
+    z-index: 1000;
+    /* Ensure header is above other content */
 }
 
 #footer {
@@ -16,4 +31,6 @@
     bottom: 0;
     width: 100%;
     text-align: center;
+    z-index: 1000;
+    /* Ensure footer is above other content */
 }
