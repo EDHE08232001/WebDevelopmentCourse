@@ -3,18 +3,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const wordCount = document.getElementById('wordCount');
 
     postContent.addEventListener('input', () => {
-        const words = postContent.value.split(/\s+/).filter(Boolean); // Split by whitespace and remove empty strings
+        const words = postContent.value.split(/\s+/).filter(Boolean);
         wordCount.textContent = `${words.length}/35 words`;
-
-        // Optionally, disable the submit button if the word count exceeds 35
-        // document.querySelector('#createPostForm button[type="submit"]').disabled = words.length > 35;
     });
 
     document.getElementById('createPostForm').addEventListener('submit', function (e) {
-        e.preventDefault(); // Prevent the default form submission
+        e.preventDefault();
         const words = postContent.value.split(/\s+/).filter(Boolean);
         if (words.length <= 35) {
-            // Submit the form data
             fetch('/create-post', {
                 method: 'POST',
                 headers: {
@@ -22,13 +18,33 @@ document.addEventListener("DOMContentLoaded", function () {
                 },
                 body: `post=${encodeURIComponent(postContent.value)}`,
             })
-                .then(response => response.text())
-                .then(() => {
-                    window.location.reload(); // Reload the page to update the list of posts
-                })
-                .catch(error => console.error('Error:', error));
+            .then(response => response.text())
+            .then(() => window.location.reload())
+            .catch(error => console.error('Error:', error));
         } else {
             alert("Please limit your post to 35 words.");
         }
+    });
+
+    // Event listeners for viewing posts
+    document.querySelectorAll('.clickable-post').forEach(item => {
+        item.addEventListener('click', function () {
+            const postContent = this.getAttribute('data-post'); // Get the post content
+            document.getElementById('viewPostContent').textContent = postContent; // Set the content in the modal
+        });
+    });
+
+    // Event listeners for deleting posts
+    document.querySelectorAll('.delete-post').forEach(button => {
+        button.addEventListener('click', function (e) {
+            e.stopPropagation(); // Prevent triggering the click event of the post
+            const postIndex = this.getAttribute('data-index');
+            fetch(`/delete-post?postIndex=${postIndex}`, {
+                method: 'GET',
+            })
+            .then(response => response.text())
+            .then(() => window.location.reload())
+            .catch(error => console.error('Error:', error));
+        });
     });
 });

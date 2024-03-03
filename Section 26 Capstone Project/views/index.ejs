@@ -20,10 +20,10 @@
             <div class="posts-list" style="max-height: 400px; overflow-y: scroll;">
                 <% if(posts.length > 0) { %>
                     <% posts.forEach(function(post, index) { %>
-                        <div class="card mb-3">
+                        <div class="card mb-3 clickable-post" data-bs-toggle="modal" data-bs-target="#viewPostModal" data-post="<%= post %>">
                             <div class="card-body">
-                                <p class="card-text"><%= post %></p>
-                                <button class="btn btn-danger" onclick="location.href='/delete-post?postIndex=<%= index %>'">Delete</button>
+                                <p class="card-text"><%= post.split(" ").slice(0, 7).join(" ") %></p>
+                                <button type="button" class="btn btn-danger delete-post" data-index="<%= index %>">Delete</button>
                             </div>
                         </div>
                     <% }) %>
@@ -57,12 +57,29 @@
         </div>
     </section>
 
+    <!-- View Post Modal -->
+    <section id="viewPostModalSection">
+        <div class="modal fade" id="viewPostModal" tabindex="-1" aria-labelledby="viewPostModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="viewPostModalLabel">View Post</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="viewPostContent"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="footer">
         <%- include("./partials/footer.ejs") %>
     </section>
     
     <!-- External JavaScript File -->
-    <script src="./scripts/modalForm.js"></script>
+    <script src="./javascript/modalForm.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

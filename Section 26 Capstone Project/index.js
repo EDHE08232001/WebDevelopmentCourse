@@ -26,13 +26,14 @@ app.post("/create-post", (req, res) => {
 });
 
 // Route to handle post deletion
-app.post("/delete-post", (req, res) => {
-    const postIndex = req.body.postIndex; // Index of the post to be deleted
-    if (postIndex >= 0 && postIndex < posts.length) { // Validate index to avoid errors
-        posts.splice(postIndex, 1); // Remove the post from the array
+app.get("/delete-post", (req, res) => {
+    const postIndex = parseInt(req.query.postIndex);
+    if (postIndex >= 0 && postIndex < posts.length) {
+        posts.splice(postIndex, 1);
     }
-    res.redirect("/"); // Redirect back to the homepage
+    res.redirect("/");
 });
+
 
 // Connecting to the determined port
 app.listen(port, () => {
