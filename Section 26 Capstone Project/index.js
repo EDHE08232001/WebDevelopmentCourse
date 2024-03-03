@@ -5,8 +5,12 @@ const app = express();
 const port = 3000;
 
 // Middlewares
-app.use(express.static("public"));
+app.use(express.static("./public"));
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.get("/", (req, res) => {
+    res.render("index.ejs");
+});
 
 // Connecting to the determined port
 app.listen(port, () => {
