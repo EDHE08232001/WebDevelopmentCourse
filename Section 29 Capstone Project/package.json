@@ -1,0 +1,17 @@
+{
+  "name": "use-public-apis-demo",
+  "version": "1.0.0",
+  "description": "Section 29 Capstone Project",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Edward He",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.6.8",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2"
+  }
+}
