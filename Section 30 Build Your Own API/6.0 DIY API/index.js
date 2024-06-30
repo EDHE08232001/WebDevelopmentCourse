@@ -68,12 +68,97 @@ app.post("/jokes", (req, res) => {
 });
 
 //5. PUT a joke
+// Handle PUT requests to the "/jokes/:id" endpoint
+app.put("/jokes/:id", (req, res) => {
+  // Extract the 'id' parameter from the request URL and convert it to an integer
+  const id = parseInt(req.params.id);
+
+  // Create a replacement joke object using data from the request body
+  const replacementJoke = {
+    id: id,  // Use the extracted 'id' for the new joke
+    jokeText: req.body.text,  // Extract the joke text from the request body
+    jokeType: req.body.type,  // Extract the joke type from the request body
+  };
+
+  // Find the index of the joke in the 'jokes' array that matches the 'id'
+  const searchIndex = jokes.findIndex((joke) => {
+    return joke.id === id;
+  });
+
+  // Replace the joke at the found index with the new joke
+  jokes[searchIndex] = replacementJoke;
+
+  // Respond with the replacement joke in JSON format
+  res.json(replacementJoke);
+});
 
 //6. PATCH a joke
+// Handle PATCH requests to the "/jokes/:id" endpoint
+app.patch("/jokes/:id", (req, res) => {
+  // Extract the 'id' parameter from the request URL and convert it to an integer
+  const id = parseInt(req.params.id);
+
+  // Find the existing joke in the 'jokes' array that matches the 'id'
+  const existingJoke = jokes.find((joke) => {
+    return joke.id === id;
+  });
+
+  // Create a replacement joke object using data from the request body or fall back to existing data
+  const replacementJoke = {
+    id: id,  // Use the extracted 'id' for the new joke
+    jokeText: req.body.text || existingJoke.jokeText,  // Use new text or fall back to existing text
+    jokeType: req.body.type || existingJoke.jokeType,  // Use new type or fall back to existing type
+  };
+
+  // Find the index of the joke in the 'jokes' array that matches the 'id'
+  const searchIndex = jokes.findIndex((joke) => {
+    return joke.id === id;
+  });
+
+  // Replace the joke at the found index with the new joke
+  jokes[searchIndex] = replacementJoke;
+
+  // Log the updated joke to the console
+  console.log(jokes[searchIndex]);
+
+  // Respond with the updated joke in JSON format
+  res.json(replacementJoke);
+});
 
 //7. DELETE Specific joke
+// Handle DELETE requests to the "/jokes/:id" endpoint
+app.delete("/jokes/:id", (req, res) => {
+  // Extract the 'id' parameter from the request URL and convert it to an integer
+  const id = parseInt(req.params.id);
+
+  // Find the index of the joke in the 'jokes' array that matches the 'id'
+  const searchIndex = jokes.findIndex((joke) => {
+    return joke.id === id;
+  });
+
+  // Check if the joke with the given 'id' was found
+  if (searchIndex > -1) {
+    // Remove the joke at the found index from the 'jokes' array
+    jokes.splice(searchIndex, 1);
+
+    // Respond with a 200 OK status to indicate successful deletion
+    res.sendStatus(200);
+  } else {
+    // Respond with a 404 Not Found status and an error message if the joke was not found
+    res.status(404).json({ error: `Joke with id: ${id} not found. No jokes were deleted.` });
+  }
+});
 
 //8. DELETE All jokes
+app.delete("/all", (req, res) => {
+  const userKey = req.query.key;
+  if (userKey === masterKey) {
+    jokes = [];
+    res.sendStatus(200);
+  } else {
+    res.status(404).json({ error: `Your are not authorised to perform this action.` });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Successfully started server on port ${port}.`);
