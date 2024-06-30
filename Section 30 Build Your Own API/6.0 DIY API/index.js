@@ -61,7 +61,7 @@ app.post("/jokes", (req, res) => {
   jokes.push(newJoke);
 
   // Log the last added joke to the console
-  crossOriginIsolated.log(jokes.slice(-1));
+  console.log(jokes.slice(-1));
 
   // Respond with the new joke in JSON format
   res.json(newJoke);
