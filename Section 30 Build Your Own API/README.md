@@ -1,15 +1,17 @@
-* Section 30 Notes
+# Section 30 Notes
 
-** What makes an API RESTful?
+## What makes an API RESTful?
 
-    * HTTP Methods
+    ### HTTP Methods
 
-        * GET
+        - GET
 
-        * POST
+        - POST
 
-        * PUT
+        -  PUT
 
-        * PATCH
-        
-        * DELETE
+        - PATCH
+
+        - DELETE
+
+    ###
