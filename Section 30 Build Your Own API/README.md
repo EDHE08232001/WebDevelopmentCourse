@@ -27,3 +27,6 @@
         - Each request can be complete and each request can be complete without knowing previous states
 
 ![image](./assets/statelessIllustration.png)
+
+    5: Resource-Based
+        - Uses universal resource identifier/locator
