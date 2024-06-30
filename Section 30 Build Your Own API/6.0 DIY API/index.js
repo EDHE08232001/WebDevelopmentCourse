@@ -8,12 +8,64 @@ const masterKey = "4VGP2DN-6EWM4SJ-N6FGRHV-Z3PR3TT";
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //1. GET a random joke
+// Handle GET requests to the "/random" endpoint
+app.get("/random", (req, res) => {
+  // Generate a random index based on the length of the jokes array
+  const randomIndex = Math.floor(Math.random() * jokes.length);
+
+  // Respond with a random joke from the jokes array in JSON format
+  res.json(jokes[randomIndex]);
+});
 
 //2. GET a specific joke
+// Handle GET requests to the "/jokes/:id" endpoint
+app.get("/jokes/:id", (req, res) => {
+  // Extract the 'id' parameter from the request URL and convert it to an integer
+  const id = parseInt(req.params.id);
+
+  // Find the joke in the 'jokes' array that has a matching 'id'
+  const foundJoke = jokes.find((joke) => {
+    return joke.id === id;
+  });
+
+  // Respond with the found joke in JSON format
+  res.json(foundJoke);
+});
 
 //3. GET a jokes by filtering on the joke type
+// Handle GET requests to the "/filter" endpoint
+app.get("/filter", (req, res) => {
+  // Extract the 'type' query parameter from the request URL
+  const type = req.query.type;
+
+  // Filter the 'jokes' array to find jokes that match the 'type'
+  const filteredActivities = jokes.filter((joke) => {
+    return joke.jokeType === type;
+  });
+
+  // Respond with the filtered jokes in JSON format
+  res.json(filteredActivities);
+});
 
 //4. POST a new joke
+// Handle POST requests to the "/jokes" endpoint
+app.post("/jokes", (req, res) => {
+  // Create a new joke object using data from the request body
+  const newJoke = {
+    id: jokes.length + 1,  // Assign a new id based on the length of the jokes array
+    jokeText: req.body.text,  // Extract the joke text from the request body
+    jokeType: req.body.type,  // Extract the joke type from the request body
+  };
+
+  // Add the new joke to the jokes array
+  jokes.push(newJoke);
+
+  // Log the last added joke to the console
+  crossOriginIsolated.log(jokes.slice(-1));
+
+  // Respond with the new joke in JSON format
+  res.json(newJoke);
+});
 
 //5. PUT a joke
 
