@@ -2,7 +2,7 @@
 
 ## What makes an API RESTful?
 
-    ### HTTP Methods
+    1: HTTP Methods
 
         - GET
 
