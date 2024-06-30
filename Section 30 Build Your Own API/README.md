@@ -26,4 +26,4 @@
 
         - Each request can be complete and each request can be complete without knowing previous states
 
-        ![image](./assets/statelessIllustration.png)
+        - ![image](./assets/statelessIllustration.png)
