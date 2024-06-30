@@ -21,3 +21,5 @@
 
     5: Resource-Based
         - Uses universal resource identifier/locator
+
+**Node:** Internet is considered one of the most successful implementations of the REST architecture
