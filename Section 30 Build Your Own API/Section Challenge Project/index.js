@@ -1,3 +1,8 @@
+// Summary:
+// This code sets up a basic Express.js server that provides a RESTful API for managing blog posts.
+// It includes endpoints to get all posts, get a specific post by ID, create a new post, update a post, and delete a post.
+// The posts are stored in-memory and manipulated using standard HTTP methods (GET, POST, PATCH, DELETE).
+
 import express from "express";
 import bodyParser from "body-parser";
 
@@ -32,24 +37,99 @@ let posts = [
   },
 ];
 
-let lastId = 3;
+let lastId = 3; // Keeps track of the last assigned post ID
 
 // Middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json()); // Parses incoming requests with JSON payloads
+app.use(bodyParser.urlencoded({ extended: true })); // Parses incoming requests with URL-encoded payloads
 
-//Write your code here//
+// CHALLENGE 1: GET All posts
+// This endpoint retrieves all posts from the in-memory data store
+app.get("/posts", (req, res) => {
+  console.log(posts); // Logs the posts to the console
+  res.json(posts); // Responds with the JSON array of all posts
+});
 
-//CHALLENGE 1: GET All posts
+// CHALLENGE 2: GET a specific post by id
+// This endpoint retrieves a post by its ID
+app.get("/posts/:id", (req, res) => {
+  const post = posts.find((p) => {
+    return p.id === parseInt(req.params.id); // Finds the post with the matching ID
+  });
 
-//CHALLENGE 2: GET a specific post by id
+  if (!post) {
+    return res.status(404).json({
+      message: "Post not found", // Responds with a 404 status if the post is not found
+    });
+  }
 
-//CHALLENGE 3: POST a new post
+  res.json(post); // Responds with the found post
+});
 
-//CHALLENGE 4: PATCH a post when you just want to update one parameter
+// CHALLENGE 3: POST a new post
+// This endpoint creates a new post
+app.post("/posts", (req, res) => {
+  const newId = (lastId += 1); // Generates a new ID by incrementing the last ID
 
-//CHALLENGE 5: DELETE a specific post by providing the post id.
+  const post = {
+    id: newId,
+    title: req.body.title,
+    content: req.body.content,
+    author: req.body.author,
+    date: new Date(), // Sets the current date as the post's date
+  };
 
+  lastId = newId; // Updates the last ID
+  posts.push(post); // Adds the new post to the in-memory data store
+  res.status(201).json(post); // Responds with the created post and a 201 status
+});
+
+// CHALLENGE 4: PATCH a post when you just want to update one parameter
+// This endpoint updates specific fields of a post by its ID
+app.patch("/posts/:id", (req, res) => {
+  const post = posts.find((p) => {
+    return p.id === parseInt(req.params.id); // Finds the post with the matching ID
+  });
+
+  if (!post) {
+    return res.status(404).json({ message: "Post not found" }); // Responds with a 404 status if the post is not found
+  }
+
+  if (req.body.title) {
+    post.title = req.body.title; // Updates the title if provided in the request body
+  }
+
+  if (req.body.content) {
+    post.content = req.body.content; // Updates the content if provided in the request body
+  }
+
+  if (req.body.author) {
+    post.author = req.body.author; // Updates the author if provided in the request body
+  }
+
+  res.json(post); // Responds with the updated post
+});
+
+// CHALLENGE 5: DELETE a specific post by providing the post id
+// This endpoint deletes a post by its ID
+app.delete("/posts/:id", (req, res) => {
+  const index = posts.findIndex((p) => {
+    return p.id === parseInt(req.params.id); // Finds the index of the post with the matching ID
+  });
+
+  if (index === -1) {
+    return res.status(404).json({
+      message: "Post not found", // Responds with a 404 status if the post is not found
+    });
+  }
+
+  posts.splice(index, 1); // Removes the post from the in-memory data store
+  res.json({
+    message: "Post Deleted", // Responds with a confirmation message
+  });
+});
+
+// Starts the server and listens on the specified port
 app.listen(port, () => {
   console.log(`API is running at http://localhost:${port}`);
 });
