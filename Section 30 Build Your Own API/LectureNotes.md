@@ -255,8 +255,4 @@ Here are some example API calls for each route:
 
 ## Authors
 
-- **Your Name** - *Initial work*
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+- **Edward He** - *Initial work*
