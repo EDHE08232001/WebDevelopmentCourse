@@ -294,4 +294,101 @@ SELECT * FROM employees;
 
 ---
 
+## Understanding SQL Relationships, Foreign Keys, and Joins
+
+In relational databases, relationships are established between tables using foreign keys. Joins are used to retrieve data from multiple tables based on these relationships.
+
+### Foreign Keys
+
+A foreign key is a column or a set of columns in one table that uniquely identifies a row in another table. It establishes a relationship between the two tables.
+
+### Syntax
+
+```sql
+CREATE TABLE table_name (
+    column1 datatype PRIMARY KEY,
+    column2 datatype,
+    column3 datatype,
+    ...
+    FOREIGN KEY (foreign_key_column) REFERENCES parent_table(primary_key_column)
+);
+```
+
+### Example
+
+Consider two tables, `departments` and `employees`:
+
+```sql
+CREATE TABLE departments (
+    department_id INT PRIMARY KEY,
+    department_name VARCHAR(50)
+);
+
+CREATE TABLE employees (
+    employee_id INT PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    department_id INT,
+    FOREIGN KEY (department_id) REFERENCES departments(department_id)
+);
+```
+
+In this example, `department_id` in the `employees` table is a foreign key that references `department_id` in the `departments` table, establishing a relationship between the two tables.
+
+### Inner Joins
+
+An inner join retrieves records that have matching values in both tables. It combines rows from two or more tables based on a related column between them.
+
+### Syntax
+
+```sql
+SELECT columns
+FROM table1
+INNER JOIN table2
+ON table1.column = table2.column;
+```
+
+### Example
+
+```sql
+SELECT employees.first_name, employees.last_name, departments.department_name
+FROM employees
+INNER JOIN departments
+ON employees.department_id = departments.department_id;
+```
+
+This query retrieves the first name, last name, and department name of all employees, combining data from the `employees` and `departments` tables based on the matching `department_id`.
+
+### Other Types of Joins
+
+- **LEFT JOIN**: Retrieves all records from the left table and the matched records from the right table.
+- **RIGHT JOIN**: Retrieves all records from the right table and the matched records from the left table.
+- **FULL JOIN**: Retrieves all records when there is a match in either left or right table.
+
+### Example of LEFT JOIN
+
+```sql
+SELECT employees.first_name, employees.last_name, departments.department_name
+FROM employees
+LEFT JOIN departments
+ON employees.department_id = departments.department_id;
+```
+
+This retrieves all employees and their corresponding department names, including those without a matching department.
+
+### Example of FULL JOIN
+
+```sql
+SELECT employees.first_name, employees.last_name,
+
+ departments.department_name
+FROM employees
+FULL JOIN departments
+ON employees.department_id = departments.department_id;
+```
+
+This retrieves all employees and departments, showing nulls where there is no match.
+
+---
+
 These examples cover the basic operations you will need to work with SQL databases. Feel free to expand on these as you become more familiar with SQL.
