@@ -23,6 +23,7 @@ CREATE TABLE table_name (
     column3 datatype,
     ....
 );
+```
 
 
 ---
