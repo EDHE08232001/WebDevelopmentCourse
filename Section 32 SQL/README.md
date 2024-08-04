@@ -25,7 +25,6 @@ CREATE TABLE table_name (
 );
 ```
 
-
 ---
 
 ## Main Operations with Databases
@@ -45,6 +44,16 @@ CREATE DATABASE database_name;
 ```
 
 Replace `database_name` with the name you want for your database.
+
+## Dropping a Database
+
+If you need to delete a database, use the `DROP DATABASE` statement. This will permanently remove the database and all its data:
+
+```sql
+DROP DATABASE database_name;
+```
+
+Replace `database_name` with the name of the database you want to delete. **Note:** This action is irreversible, so use it with caution.
 
 ## Creating Tables
 
@@ -363,7 +372,9 @@ This query retrieves the first name, last name, and department name of all emplo
 
 - **LEFT JOIN**: Retrieves all records from the left table and the matched records from the right table.
 - **RIGHT JOIN**: Retrieves all records from the right table and the matched records from the left table.
-- **FULL JOIN**: Retrieves all records when there is a match in either left or right table.
+- **FULL JOIN**: Retrieves all records when there is a match in either left or right table
+
+.
 
 ### Example of LEFT JOIN
 
@@ -379,16 +390,10 @@ This retrieves all employees and their corresponding department names, including
 ### Example of FULL JOIN
 
 ```sql
-SELECT employees.first_name, employees.last_name,
-
- departments.department_name
+SELECT employees.first_name, employees.last_name, departments.department_name
 FROM employees
 FULL JOIN departments
 ON employees.department_id = departments.department_id;
 ```
 
 This retrieves all employees and departments, showing nulls where there is no match.
-
----
-
-These examples cover the basic operations you will need to work with SQL databases. Feel free to expand on these as you become more familiar with SQL.
