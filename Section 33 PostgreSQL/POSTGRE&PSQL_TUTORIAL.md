@@ -136,6 +136,57 @@ To grant privileges to a user on a specific database, use the following SQL comm
 GRANT ALL PRIVILEGES ON DATABASE mynewdatabase TO mynewuser;
 ```
 
+## Examples from Recent Session
+
+Here are some practical examples based on a recent session:
+
+### Creating a Role and Database
+
+```sh
+# Start PostgreSQL
+brew services start postgresql@16
+
+# Connect to PostgreSQL
+psql postgres
+
+# Create a new role with login and password
+CREATE ROLE edhe_user WITH LOGIN PASSWORD 'edward0823';
+
+# Grant createdb privilege to the new role
+ALTER ROLE edhe_user CREATEDB;
+
+# List all roles
+\du
+
+# Exit psql
+\q
+```
+
+### Connecting with the New User and Creating a Database
+
+```sh
+# Connect to PostgreSQL as the new user
+psql postgres -U edhe_user
+
+# Create a new database
+CREATE DATABASE demo_database;
+
+# List all databases
+\l
+
+# Connect to the new database (Note: Fix the database name if it doesn't exist)
+\connect demo_database;
+
+# If connection fails due to non-existent database, ensure the database name is correct
+```
+
+### Additional psql Commands
+
+```sh
+# List large objects (though often empty unless used)
+\dl
+```
+
 ## Conclusion
 
 By using the `psql` command-line interface and PostgreSQL server commands, you can perform a wide range of database management tasks. This is useful for initial setup, maintenance, and debugging purposes. Combining these skills with the ability to interact with PostgreSQL from a Node.js application will make you a more versatile developer.
