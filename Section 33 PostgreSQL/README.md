@@ -24,6 +24,9 @@ sudo -u postgres createdb mydatabase
 
 # Create a new user (replace 'username' and 'password' with your credentials)
 sudo -u postgres createuser --interactive
+
+# After running your code or application, close the database (optional and only if you want to stop the server)
+sudo service postgresql stop
 ```
 
 ## Installing the pg Library
