@@ -57,8 +57,6 @@ app.post("/add", async (req, res) => {
     LOWER(country_name): This function converts the country_name column value to lowercase.
     This ensures that the search is case-insensitive. For example, if the country_name is "Canada",
     it will be converted to "canada".
-
-
     */
     const result = await db.query(
       "SELECT country_code FROM countries WHERE LOWER(country_name) LIKE  '%' || $1 || '%';",
