@@ -148,6 +148,10 @@ FROM table_name
 WHERE condition;
 ```
 
+```sql
+SELECT <COLUMN> FROM <TABLE>
+```
+
 ### Example
 
 ```sql
