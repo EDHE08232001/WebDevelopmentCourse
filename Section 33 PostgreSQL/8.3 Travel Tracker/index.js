@@ -5,7 +5,7 @@ import pg from "pg";
 const db = new pg.Client({
   user: "edwardhe",
   host: "localhost",
-  database: "visited_countries",
+  database: "world_demo",
   password: "edward0823",
   port: "5432",
 });
@@ -31,7 +31,7 @@ async function checkVisisted() {
 
 app.get("/", async (req, res) => {
   //Write your code here.
-  const result = await db.query("SELECT country FROM visited_countries");
+  const result = await db.query("SELECT country_code FROM visited_countries");
   let countries = [];
   result.rows.forEach((country) => {
     countries.push(country.country_code);
@@ -58,7 +58,7 @@ app.post("/add", async (req, res) => {
     This ensures that the search is case-insensitive. For example, if the country_name is "Canada",
     it will be converted to "canada".
 
-    
+
     */
     const result = await db.query(
       "SELECT country_code FROM countries WHERE LOWER(country_name) LIKE  '%' || $1 || '%';",
