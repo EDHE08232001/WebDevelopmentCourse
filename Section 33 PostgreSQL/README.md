@@ -158,6 +158,15 @@ CREATE TABLE visited_countries (
 );
 ```
 
+### READ and SORT
+
+```sql
+-- This is an example query
+SELECT * FROM public.visited_countries ORDER BY id ASC;
+```
+
+This clause is used to sort the result set by one or more columns. In this case, the results will be sorted by the id column in ascending order (ASC stands for ascending). Sorting in ascending order means the smallest values will come first, followed by larger values.
+
 ## Conclusion
 
 By following this guide, you should now be able to connect to a PostgreSQL database from a Node.js application and perform basic CRUD (Create, Read, Update, Delete) operations. Practice these examples and experiment with more complex queries to become proficient in using PostgreSQL with Node.js.
