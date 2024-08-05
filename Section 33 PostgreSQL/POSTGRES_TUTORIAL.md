@@ -84,6 +84,11 @@ To insert data into a table, use the `INSERT` command:
 INSERT INTO users (name, email) VALUES ('John Doe', 'john.doe@example.com');
 ```
 
+### Inserting with Javascript
+```sql
+db.query("INSERT INTO tablename (col1, col2, col3) VALUES ($1, $2, $3)", [val1, val2, val3]);
+```
+
 ### Updating Data
 
 To update data in a table, use the `UPDATE` command:
