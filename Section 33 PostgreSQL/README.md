@@ -147,6 +147,17 @@ db.query(text, values, (err, res) => {
 - **Parameterization**: Always use parameterized queries (as shown in the examples) to avoid SQL injection attacks.
 - **Connection Pooling**: For better performance, especially in production environments, consider using a connection pool to manage multiple database connections efficiently.
 
+## SQL Notes
+
+### UNIQUE and NOT NULL
+
+```sql
+CREATE TABLE visited_countries (
+	id SERIAL PRIMARY KEY,
+	country_code CHAR(2) NOT NULL UNIQUE -- can't be empry and can't be repeated
+);
+```
+
 ## Conclusion
 
 By following this guide, you should now be able to connect to a PostgreSQL database from a Node.js application and perform basic CRUD (Create, Read, Update, Delete) operations. Practice these examples and experiment with more complex queries to become proficient in using PostgreSQL with Node.js.
