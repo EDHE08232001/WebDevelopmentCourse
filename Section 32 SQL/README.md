@@ -149,7 +149,7 @@ WHERE condition;
 ```
 
 ```sql
-SELECT <COLUMN> FROM <TABLE>
+SELECT <COLUMN> FROM <TABLE> WHERE <CONDITION> LIKE <PATTERN>;
 ```
 
 ### Example
