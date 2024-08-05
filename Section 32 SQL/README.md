@@ -162,6 +162,15 @@ WHERE salary > 50000;
 
 This retrieves the first name, last name, and salary of employees who earn more than 50,000.
 
+### Example
+```sql
+SELECT country
+FROM world_food
+WHERE country Like 'United' || '%';
+```
+
+|| will merge two patterns.
+
 ---
 
 ## Updating Data in Tables
