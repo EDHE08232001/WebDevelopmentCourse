@@ -215,6 +215,27 @@ CREATE TABLE homework_submission (
 );
 ```
 
+### MANY to MANY Relationship
+```sql
+CREATE TABLE student (
+  id SERIAL PRIMARY KEY,
+  first_name TEXT,
+  last_name TEXT
+);
+
+-- Many to Many --
+CREATE TABLE class (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(45)
+);
+
+CREATE TABLE enrollment (
+  student_id INTEGER REFERENCES student(id),
+  class_id INTEGER REFERENCES class(id),
+  PRIMARY KEY (student_id, class_id)
+);
+```
+
 
 ### Additional psql Commands
 
