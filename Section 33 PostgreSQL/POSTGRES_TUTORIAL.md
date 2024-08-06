@@ -185,6 +185,21 @@ CREATE DATABASE demo_database;
 # If connection fails due to non-existent database, ensure the database name is correct
 ```
 
+### One to One Relationship
+```sql
+CREATE TABLE student (
+    id SERIAL PRIMARY KEY,
+    first_name TEXT,
+    last_name TEXT
+);
+
+CREATE TABLE contact_detail (
+    id INTEGER REFERENCES student(id) UNIQUE,
+    tel TEXT,
+    address TEXT
+);
+```
+
 ### Additional psql Commands
 
 ```sh
