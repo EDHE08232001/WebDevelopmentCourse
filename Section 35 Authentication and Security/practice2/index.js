@@ -1,6 +1,9 @@
+// ENCRYPTION
+
 import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
+
 
 const app = express();
 const port = 3000;
@@ -12,7 +15,6 @@ const db = new pg.Client({
   password: "edward0823",
   port: 5432,
 });
-
 db.connect();
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -35,16 +37,17 @@ app.post("/register", async (req, res) => {
   const password = req.body.password;
 
   try {
-    const checkResult = await db.query("SELECT * FROM users WHERE email = $1;");
+    const checkResult = await db.query("SELECT * FROM users WHERE email = $1", [
+      email,
+    ]);
 
     if (checkResult.rows.length > 0) {
       res.send("Email already exists. Try logging in.");
     } else {
       const result = await db.query(
-        "INSERT INTO users (email, password) VALUES ($1, $2);",
+        "INSERT INTO users (email, password) VALUES ($1, $2)",
         [email, password]
       );
-
       console.log(result);
       res.render("secrets.ejs");
     }
@@ -58,13 +61,10 @@ app.post("/login", async (req, res) => {
   const password = req.body.password;
 
   try {
-    const result = await db.query(
-      "SELECT * FROM users WHERE email = $1;",
-      [email]
-    );
-
+    const result = await db.query("SELECT * FROM users WHERE email = $1", [
+      email,
+    ]);
     if (result.rows.length > 0) {
-      console.log(result.rows);
       const user = result.rows[0];
       const storedPassword = user.password;
 
