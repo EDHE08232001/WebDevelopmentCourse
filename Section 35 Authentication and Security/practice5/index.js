@@ -5,16 +5,12 @@ import bcrypt from "bcrypt";
 import passport from "passport";
 import { Strategy } from "passport-local";
 import session from "express-session";
-import env from "dotenv"; // import dotenv module
-
-/*
-Usually you don't upload .env to github!!!
-*/
+import env from "dotenv";
 
 const app = express();
 const port = 3000;
 const saltRounds = 10;
-env.config(); // loads .env files
+env.config();
 
 app.use(
   session({
@@ -23,6 +19,7 @@ app.use(
     saveUninitialized: true,
   })
 );
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
@@ -60,7 +57,7 @@ app.get("/logout", (req, res) => {
 });
 
 app.get("/secrets", (req, res) => {
-  // console.log(req.user);
+  console.log(req.user);
   if (req.isAuthenticated()) {
     res.render("secrets.ejs");
   } else {
