@@ -133,3 +133,25 @@ Alternatively, you can install `create-react-app` locally in a specific project 
 - **Use `npx create-react-app`**: This is the simplest, cleanest, and most efficient method to create a new React app, as it does not require any installations and always uses the latest version.
 - **Use `npm install -g create-react-app`** if you prefer to have the tool globally installed for use across multiple projects, but keep in mind that you will need to manually manage its updates.
 - **Avoid installing `create-react-app` locally** within a project, as it adds unnecessary bloat and complexity.
+
+Also Note:
+
+```zsh
+  npm start
+    Starts the development server.
+
+  npm run build
+    Bundles the app into static files for production.
+
+  npm test
+    Starts the test runner.
+
+  npm run eject
+    Removes this tool and copies build dependencies, configuration files
+    and scripts into the app directory. If you do this, you can’t go back!
+
+We suggest that you begin by typing:
+
+  cd my-demo-app
+  npm start
+```
