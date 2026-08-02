@@ -20,7 +20,7 @@ import pg from "pg"; // Import the pg module (node-postgres) for talking to Post
 // environment variables using a `.env` file + the `dotenv` package, e.g.:
 //   // .env (never commit this file — add it to .gitignore)
 //   PGUSER=edwardhe
-//   PGPASSWORD=edward0823
+//   PGPASSWORD=your_postgres_password
 //   PGHOST=localhost
 //   PGDATABASE=world_demo
 //   PGPORT=5432
@@ -40,7 +40,7 @@ const db = new pg.Client({
   user: "edwardhe", // Database username
   host: "localhost", // Database host
   database: "world_demo", // Database name
-  password: "edward0823", // Database password
+  password: "your_postgres_password", // Database password
   port: 5432, // Database port
 });
 

@@ -259,7 +259,7 @@ const db = new pg.Client({
   user: "edwardhe",
   host: "localhost",
   database: "world_demo",
-  password: "edward0823", // ⚠️ hardcoded real-looking password
+  password: "your_postgres_password", // ⚠️ hardcoded real-looking password
   port: 5432,
 });
 ```
@@ -284,7 +284,7 @@ This is convenient for a local tutorial, but it is **not safe for real projects*
    PGUSER=edwardhe
    PGHOST=localhost
    PGDATABASE=world_demo
-   PGPASSWORD=edward0823
+   PGPASSWORD=your_postgres_password
    PGPORT=5432
    ```
 

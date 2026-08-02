@@ -53,7 +53,7 @@ app.use(session({
 app.use(passport.initialize()); // Sets up Passport's internal state on every request
 app.use(passport.session()); // Bridges Passport with express-session: reads the logged-in user out of req.session and attaches it as req.user
 
-// SECURITY WARNING: Hardcoded database credentials ("edwardhe" / "edward0823")
+// SECURITY WARNING: Hardcoded database credentials ("edwardhe" / "your_postgres_password")
 // committed directly in source code - same issue as practice1 and practice2.
 // These should be moved to environment variables (process.env.PG_USER,
 // process.env.PG_PASSWORD, ...) loaded via dotenv, as done in practice4/index.js,
@@ -64,7 +64,7 @@ const db = new pg.Client({
   user: "edwardhe", // Username for the database
   host: "localhost", // Database server address
   database: "secrets", // Name of the database
-  password: "edward0823", // Password for the database
+  password: "your_postgres_password", // Password for the database
   port: 5432, // Port on which PostgreSQL is running
 });
 db.connect(); // Establishes a connection to the PostgreSQL database

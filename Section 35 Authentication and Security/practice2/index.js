@@ -16,7 +16,7 @@ const app = express(); // Initialize the Express application
 const port = 3000; // Port number for the server to listen on
 const saltRounds = 10; // Number of salt rounds for bcrypt hashing
 
-// SECURITY WARNING: Hardcoded database credentials below ("edwardhe" / "edward0823").
+// SECURITY WARNING: Hardcoded database credentials below ("edwardhe" / "your_postgres_password").
 // Committing real credentials to source control means anyone with repo access
 // can read them; if this were a real/live password it should be treated as
 // compromised and rotated. These values should instead be loaded from
@@ -28,7 +28,7 @@ const db = new pg.Client({
   user: "edwardhe", // Database username
   host: "localhost", // Database host
   database: "secrets", // Database name
-  password: "edward0823", // Database password
+  password: "your_postgres_password", // Database password
   port: 5432, // Database port
 });
 db.connect(); // Connecting to the database

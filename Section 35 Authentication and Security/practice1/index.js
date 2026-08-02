@@ -10,7 +10,7 @@ const app = express();
 const port = 3000;
 
 // SECURITY WARNING: Hardcoded database credentials.
-// "edwardhe" / "edward0823" are real-looking credentials committed directly in
+// "edwardhe" / "your_postgres_password" are real-looking credentials committed directly in
 // source code. Anyone with access to this repo (or its git history) can read
 // them. In a real project these should NEVER be hardcoded - instead load them
 // from environment variables (e.g. via a .env file + the `dotenv` package, as
@@ -21,7 +21,7 @@ const db = new pg.Client({
   user: "edwardhe",
   host: "localhost",
   database: "secrets",
-  password: "edward0823",
+  password: "your_postgres_password",
   port: 5432,
 });
 

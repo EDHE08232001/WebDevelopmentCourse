@@ -49,7 +49,7 @@ app.use(passport.session());
 
 // Database credentials are now all read from environment variables instead of
 // being hardcoded (compare with practice1-3/index.js, which hardcode
-// "edwardhe"/"edward0823" directly in source). This is the correct pattern -
+// "edwardhe"/"your_postgres_password" directly in source). This is the correct pattern -
 // just remember the underlying .env file itself must never be committed to git.
 const db = new pg.Client({
   user: process.env.PG_USER,

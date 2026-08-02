@@ -11,7 +11,7 @@ const db = new pg.Client({
   user: "edwardhe",
   host: "localhost",
   database: "secrets",
-  password: "edward0823", // hardcoded — visible to anyone who reads this file or the git history
+  password: "your_postgres_password", // hardcoded — visible to anyone who reads this file or the git history
   port: 5432,
 });
 

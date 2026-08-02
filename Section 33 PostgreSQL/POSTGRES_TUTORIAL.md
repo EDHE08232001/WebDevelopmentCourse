@@ -155,7 +155,7 @@ brew services start postgresql@16
 psql postgres
 
 # Create a new role with login and password
-CREATE ROLE edhe_user WITH LOGIN PASSWORD 'edward0823';
+CREATE ROLE edhe_user WITH LOGIN PASSWORD 'your_postgres_password';
 
 # Grant createdb privilege to the new role
 ALTER ROLE edhe_user CREATEDB;
