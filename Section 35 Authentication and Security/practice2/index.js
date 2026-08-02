@@ -1,3 +1,9 @@
+// PRACTICE 2: Same registration/login flow as practice1, but now passwords are
+// HASHED with bcrypt before being stored/compared instead of kept in plaintext.
+// This is the fix for the plaintext-password anti-pattern shown in practice1/index.js.
+// (Note: the header below says "ENCRYPTION" but bcrypt performs one-way HASHING,
+// not reversible encryption - hashes cannot be decrypted back into the original password.)
+
 // ENCRYPTION
 
 // Importing required modules
@@ -10,6 +16,13 @@ const app = express(); // Initialize the Express application
 const port = 3000; // Port number for the server to listen on
 const saltRounds = 10; // Number of salt rounds for bcrypt hashing
 
+// SECURITY WARNING: Hardcoded database credentials below ("edwardhe" / "edward0823").
+// Committing real credentials to source control means anyone with repo access
+// can read them; if this were a real/live password it should be treated as
+// compromised and rotated. These values should instead be loaded from
+// environment variables via a .env file + the `dotenv` package (see
+// practice4/index.js for the pattern: process.env.PG_USER, process.env.PG_PASSWORD, etc.),
+// with .env excluded from git via .gitignore.
 // Setting up the database connection
 const db = new pg.Client({
   user: "edwardhe", // Database username
@@ -49,13 +62,24 @@ app.post("/register", async (req, res) => {
     if (checkResult.rows.length > 0) {
       res.send("Email already exists. Try logging in."); // Email already registered
     } else {
-      // Password Hashing with bcrypt
+      // Password Hashing with bcrypt.
+      // bcrypt.hash(plaintextPassword, saltRounds, callback) does two things:
+      //   1. Generates a random "salt" (extra random data) using `saltRounds`
+      //      (here 10) as a cost factor - higher saltRounds = more computationally
+      //      expensive = slower to brute-force, but slower to compute too.
+      //   2. Combines the salt with the password and runs it through the bcrypt
+      //      hashing algorithm multiple times to produce a one-way hash string.
+      // The salt is stored as part of the resulting hash string itself, so bcrypt
+      // can later re-derive it during comparison - there's no need to store the
+      // salt separately. Because hashing is one-way, even if the database leaks,
+      // an attacker cannot directly recover the original passwords.
       bcrypt.hash(password, saltRounds, async (err, hash) => {
         if (err) {
           console.log(err); // Log any error that occurs during hashing
         } else {
           console.log(hash); // Log the hashed password
-          // Insert the new user into the database with the hashed password
+          // Insert the new user into the database with the HASHED password
+          // (never the plaintext `password` variable) - this is the key fix vs practice1.
           const result = await db.query(
             "INSERT INTO users (email, password) VALUES ($1, $2)",
             [email, hash] // Store the hashed password in the database
@@ -82,7 +106,11 @@ app.post("/login", async (req, res) => {
       const user = result.rows[0]; // Retrieve the user record
       const storedHashedPassword = user.password; // Get the stored hashed password
 
-      // Compare the entered password with the stored hashed password
+      // Compare the entered password with the stored hashed password.
+      // bcrypt.compare(plaintextPassword, storedHash, callback) re-hashes the
+      // submitted plaintext password using the salt embedded in `storedHashedPassword`
+      // and checks whether the result matches. It returns true/false without ever
+      // needing to "decrypt" the stored hash (which isn't possible - hashing is one-way).
       bcrypt.compare(loginPassword, storedHashedPassword, (err, result) => {
         if (err) {
           console.log(err); // Log any error that occurs during comparison

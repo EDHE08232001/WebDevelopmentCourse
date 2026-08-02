@@ -1,2 +1,8 @@
 # Ignore all node_modules directories inside the structure of the root directory
 **/node_modules/
+
+# macOS Finder metadata files (not needed in version control)
+**/.DS_Store
+
+# Environment variable files that may contain secrets/API keys
+**/.env

@@ -36,6 +36,9 @@ app.get("/", async (req, res) => {
  */
 app.post("/", async (req, res) => {
   try {
+    // type and participants come from the form fields submitted by the user; they're
+    // interpolated into the URL as query string parameters (?type=...&participants=...)
+    // that the Bored API's /filter endpoint uses to narrow down matching activities.
     const { type, participants } = req.body;
     const response = await axios.get(`https://bored-api.appbrewery.com/filter?type=${type}&participants=${participants}`);
     const result = response.data;
@@ -44,6 +47,11 @@ app.post("/", async (req, res) => {
       console.log(response);
       console.log("\nRESPONSE.DATA:");
       console.log(result);
+      // Math.random() returns a float between 0 (inclusive) and 1 (exclusive).
+      // Multiplying by result.length scales that to [0, result.length), and Math.floor()
+      // rounds down to a whole number, giving a valid random index into the `result` array
+      // (e.g. for a 5-item array this always yields 0, 1, 2, 3, or 4). That's how we pick
+      // one random matching activity out of all the ones the API returned.
       res.render("index.ejs", { data: result[Math.floor(Math.random() * result.length)] });
     } else {
       throw new Error("No matching activities found.");

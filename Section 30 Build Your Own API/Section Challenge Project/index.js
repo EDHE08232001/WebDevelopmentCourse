@@ -3,13 +3,20 @@
 // It includes endpoints to get all posts, get a specific post by ID, create a new post, update a post, and delete a post.
 // The posts are stored in-memory and manipulated using standard HTTP methods (GET, POST, PATCH, DELETE).
 
+// Import the Express framework, used to create the server and define routes
 import express from "express";
+// Import body-parser middleware, which parses incoming request bodies (JSON
+// or URL-encoded) and populates req.body for use in route handlers
 import bodyParser from "body-parser";
 
+// Create the Express application instance
 const app = express();
+// Port this REST API server listens on
 const port = 4000;
 
-// In-memory data store
+// In-memory data store: acts as our "database" of blog posts. Every route
+// below reads from and/or mutates this array directly. Data resets whenever
+// the server restarts (there is no persistent database).
 let posts = [
   {
     id: 1,
@@ -39,7 +46,7 @@ let posts = [
 
 let lastId = 3; // Keeps track of the last assigned post ID
 
-// Middleware
+// Middleware (runs on every incoming request, before the routes below)
 app.use(bodyParser.json()); // Parses incoming requests with JSON payloads
 app.use(bodyParser.urlencoded({ extended: true })); // Parses incoming requests with URL-encoded payloads
 
@@ -129,7 +136,9 @@ app.delete("/posts/:id", (req, res) => {
   });
 });
 
-// Starts the server and listens on the specified port
+// Starts the server and listens on the specified port. Once listening, the
+// five routes above respond to standard REST verbs (GET/POST/PATCH/DELETE)
+// for the "/posts" resource, all backed by the in-memory `posts` array.
 app.listen(port, () => {
   console.log(`API is running at http://localhost:${port}`);
 });

@@ -1,7 +1,13 @@
+// Express framework: creates the server and handles routing/rendering.
 import express from "express";
+// body-parser: middleware that parses incoming request bodies (needed here
+// even though the form on this page doesn't submit extra fields, since the
+// project follows the same setup pattern used elsewhere in this section).
 import bodyParser from "body-parser";
 
+// Create the Express application instance.
 const app = express();
+// Port the local development server will listen on.
 const port = 3000;
 
 //Step 3 - Make the styling show up.
@@ -9,18 +15,35 @@ const port = 3000;
 //Hint 2: The header and footer are partials.
 //Hint 3: Add the CSS link in header.ejs
 
+// Middleware: serves static assets (CSS, images, etc.) from the "public"
+// folder directly (e.g. "public/styles/main.css" -> "/styles/main.css").
 app.use(express.static("public"));
 
 //Step 4 - Add a dynamic year to the footer.
 //Hint: Google to find out how to get the current year using JS.
 
+// Middleware: parses URL-encoded form submissions into req.body.
 app.use(bodyParser.urlencoded({ extended: true }));
 
+/**
+ * GET /
+ * Renders the home page ("index.ejs") containing the band name generator
+ * form/button. No dynamic data is passed on the initial load.
+ */
 app.get("/", (req, res) => {
   //Step 1 - Make the get route work and render the index.ejs file.
   res.render("index.ejs")
 });
 
+/**
+ * POST /submit
+ * Handles the "Generate Name" button submission from index.ejs.
+ * Picks one random adjective and one random noun from the word-list arrays
+ * defined below (using Math.random() scaled to each array's length and
+ * rounded down with Math.floor to get a valid random index), then
+ * re-renders index.ejs passing the chosen words so the template can display
+ * a generated band name such as "The Adjective Noun".
+ */
 app.post("/submit", (req, res) => {
   //Step 2 - Make the generate name functionality work
   //Hint: When the "Generate Name" button in index.ejs is clicked, it should hit up this route.
@@ -30,16 +53,24 @@ app.post("/submit", (req, res) => {
   //2. Send the index.ejs as a response and add the adjective and noun to the res.render
   //3. Test to make sure that the random words display in the h1 element in index.ejs
 
+  // Random index selection: Math.random() gives a float in [0, 1), multiplying
+  // by the array length and flooring it gives a valid random array index.
   const randomAdj = adj[Math.floor(Math.random() * adj.length)];
   const randomNoun = noun[Math.floor(Math.random() * noun.length)];
 
   res.render("index.ejs", { adjective: randomAdj, noun: randomNoun });
 });
 
+// Start the HTTP server and listen for incoming requests on the given port.
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
 
+// Large word-list data used by the random band-name generator above.
+// `adj` holds hundreds of adjectives and `noun` (further below) holds
+// hundreds of nouns; one random entry from each is combined to form a
+// generated band name. These are plain static string arrays with no
+// special logic, so individual entries are not commented.
 const adj = [
   "abandoned",
   "able",
@@ -1390,6 +1421,8 @@ const adj = [
   "zigzag",
 ];
 
+// Second word list: nouns used together with a random adjective (above) to
+// build the generated band name.
 const noun = [
   "aardvark",
   "abacus",

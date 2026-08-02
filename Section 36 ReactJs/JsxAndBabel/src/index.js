@@ -1,6 +1,12 @@
 // Import necessary libraries
 import React from "react"; // React is a JavaScript library for building user interfaces
+// NOTE: Even though `React` is never referenced explicitly below, this import is required
+// whenever JSX is used in this file. Babel compiles every JSX tag (e.g. <h1>...</h1>) into a
+// call to `React.createElement(...)`, so `React` must be in scope for the compiled code to run.
 import ReactDOM from "react-dom"; // ReactDOM is a package that provides DOM-specific methods
+// ReactDOM is the "glue" between React elements (created via JSX/createElement) and the actual
+// browser DOM. It exposes `render()` (used here) which mounts/updates a React element inside a
+// real DOM node.
 
 // Deprecated way to import React in older versions (not needed with ES6 module syntax)
 // var React = require("react"); // for JSX
@@ -16,7 +22,11 @@ It takes three arguments:
 3. An optional callback function that gets executed after the rendering is complete.
 */
 
-// Rendering a simple JSX element to the DOM
+// --- JSX DEMO #1: Rendering a simple, static JSX element to the DOM ---
+// `<h1>Hello, World!</h1>` is JSX: it looks like HTML but is really JavaScript syntax sugar.
+// Babel will transpile this tag into `React.createElement("h1", null, "Hello, World!")` before
+// the browser ever sees it (see the detailed explanation and compiled output in the comment block
+// below). This is the simplest possible JSX usage: a single element, no attributes, no dynamic data.
 ReactDOM.render(<h1>Hello, World!</h1>, document.getElementById("root"));
 
 /*
@@ -67,10 +77,16 @@ document.getElementById("root").appendChild(h1);
 As you can see, this approach involves more steps and is harder to maintain compared to the JSX example.
 */
 
+// --- JSX DEMO #2: Embedding a JavaScript expression inside JSX ---
 // Example of using JSX with JavaScript expressions:
 
 // You can use JavaScript expressions inside JSX using curly braces {}
 const userName = "Sir Edward He";
+// `{userName}` is NOT a string literal — it is a JavaScript expression slot. Babel compiles this
+// JSX into `React.createElement("h1", null, "Hello, ", userName, "!")`, i.e. the variable's value
+// becomes one of the element's children, evaluated at render time (not baked in as static text).
+// This line also calls ReactDOM.render() again on the same "root" node, so it replaces the DOM
+// content produced by DEMO #1 above with this new element tree.
 ReactDOM.render(<h1>Hello, {userName}!</h1>, document.getElementById("root"));
 
 /*
@@ -94,3 +110,11 @@ ReactDOM.render(<Welcome name="Sir Edward He" />, document.getElementById("root"
 Here, `Welcome` is a functional component that takes `props` (properties) as an argument 
 and returns a JSX element. We can reuse `Welcome` component with different `name` values.
 */
+
+// --- JSX DEMO #3 (conceptual, shown in the comment above): Custom components in JSX ---
+// Note the capitalization rule: `<Welcome />` (capital "W") tells Babel/React this is a
+// user-defined component, so it compiles to `React.createElement(Welcome, { name: "Sir Edward He" })`
+// — passing the *function itself* as the type, not a string tag like "h1". Lowercase tags
+// (`<h1>`, `<div>`) always compile to string type names and are treated as built-in HTML elements.
+// The `name="Sir Edward He"` attribute becomes the `props` object (`{ name: "Sir Edward He" }`)
+// received by the `Welcome` function, which is exactly how data flows from parent to child in React.

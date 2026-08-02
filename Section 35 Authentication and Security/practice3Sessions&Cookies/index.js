@@ -1,12 +1,15 @@
+// PRACTICE 3: Builds on practice2 (bcrypt hashing) by adding SESSIONS & COOKIES
+// via express-session and Passport.js, so a logged-in user stays logged in
+// across multiple requests instead of having to "log in" on every single page.
 import express from "express"; // Importing Express.js for creating the web server
 import bodyParser from "body-parser"; // Importing body-parser to parse incoming request bodies
 import pg from "pg"; // Importing the 'pg' module for connecting to PostgreSQL
 import bcrypt from "bcrypt"; // Importing bcrypt for password hashing
 
 // Importing necessary modules for managing cookies and sessions
-import passport from "passport"; // Passport.js for authentication middleware
-import session from "express-session"; // Express-session for managing user sessions
-import { Strategy } from "passport-local"; // Local Strategy for username-password based authentication
+import passport from "passport"; // Passport.js: pluggable authentication middleware for Node/Express
+import session from "express-session"; // express-session: creates a server-side session and a signed session-ID cookie
+import { Strategy } from "passport-local"; // passport-local: a Passport "strategy" that authenticates using a username + password (as opposed to OAuth, etc.)
 
 const app = express(); // Initializing an Express application
 const port = 3000; // Setting the port number for the server to listen on
@@ -16,21 +19,46 @@ const saltRounds = 10; // Number of rounds to hash the password with bcrypt for 
 app.use(bodyParser.urlencoded({ extended: true })); // 'extended: true' allows parsing of nested objects
 app.use(express.static("public")); // Serves static files (like CSS, images) from the 'public' directory
 
-// Middleware for managing sessions
+// Middleware for managing sessions.
+// How express-session works conceptually:
+//   1. On first request, the server creates a session object (stored server-side,
+//      in memory by default here) and gives it a unique session ID.
+//   2. That session ID is sent to the browser inside a cookie, cryptographically
+//      SIGNED using the `secret` below (this prevents users from tampering with
+//      their own session ID cookie).
+//   3. On every subsequent request, the browser automatically sends the cookie
+//      back; express-session verifies the signature and loads the matching
+//      session data server-side (e.g. "this session belongs to user #4").
+// SECURITY WARNING - HARDCODED SESSION SECRET:
+// "TOPSECRETWORD" is hardcoded directly in source code instead of coming from
+// an environment variable. Anyone who reads this file (or the git history)
+// could forge valid-looking signed session cookies. Because this file is
+// committed, this secret should be treated as compromised. FIX: load it from
+// an environment variable instead, e.g. `secret: process.env.SESSION_SECRET`
+// with the real value kept only in a local, gitignored `.env` file (see
+// practice4/index.js, which does this correctly).
 app.use(session({
   secret: "TOPSECRETWORD", // Secret key used to sign the session ID cookie, ensuring the session is secure
-  resave: false, // Prevents session from being saved back to the session store if it wasn't modified
-  saveUninitialized: true, // Saves a new, unmodified session to the store
+  resave: false, // Don't re-save the session to the store on every request if nothing in it changed (avoids unnecessary writes/race conditions)
+  saveUninitialized: true, // Save a new session even if it hasn't been modified yet (needed so login attempts on a brand-new visit get a session to attach to)
   cookie: {
-    maxAge: 1000 * 60 * 60 * 24, // Sets cookie lifespan to 1 day (in milliseconds)
-    // Other options like 'secure' and 'httpOnly' can be set for enhanced security
+    maxAge: 1000 * 60 * 60 * 24, // Sets cookie lifespan to 1 day (in milliseconds) - after this, the browser discards the cookie and the user must log in again
+    // Other options like 'secure' (HTTPS-only cookie) and 'httpOnly' (blocks
+    // client-side JS from reading the cookie, reducing XSS risk) should also be
+    // set for production use - see the top-level Section 35 README's security checklist.
   },
 }));
 
-// Initialize Passport.js middleware after session middleware
-app.use(passport.initialize()); // Initializes Passport for managing user authentication
-app.use(passport.session()); // Integrates Passport with Express sessions, allowing persistent login sessions
+// Initialize Passport.js middleware after session middleware (order matters!).
+app.use(passport.initialize()); // Sets up Passport's internal state on every request
+app.use(passport.session()); // Bridges Passport with express-session: reads the logged-in user out of req.session and attaches it as req.user
 
+// SECURITY WARNING: Hardcoded database credentials ("edwardhe" / "edward0823")
+// committed directly in source code - same issue as practice1 and practice2.
+// These should be moved to environment variables (process.env.PG_USER,
+// process.env.PG_PASSWORD, ...) loaded via dotenv, as done in practice4/index.js,
+// with the .env file excluded from version control via .gitignore. Treat this
+// value as compromised since it is already committed.
 // Database configuration for PostgreSQL
 const db = new pg.Client({
   user: "edwardhe", // Username for the database
@@ -56,13 +84,16 @@ app.get("/register", (req, res) => {
   res.render("register.ejs"); // Renders the 'register.ejs' template
 });
 
-// Route for the secrets page, which is protected and requires authentication
+// Route for the secrets page - this is a PROTECTED ROUTE / access-control example.
+// `req.isAuthenticated()` is a helper Passport attaches to every request; it
+// returns true only if the incoming request's session cookie corresponds to a
+// currently logged-in user (i.e. passport.deserializeUser succeeded below).
 app.get("/secrets", (req, res) => {
   console.log(req.user); // Logs the authenticated user's information to the console
   if (req.isAuthenticated()) { // Checks if the user is authenticated using Passport
     res.render("secrets.ejs"); // Renders the 'secrets.ejs' page if the user is authenticated
   } else {
-    res.redirect("/login"); // Redirects to the login page if the user is not authenticated
+    res.redirect("/login"); // Not logged in (or session expired) -> redirect to the login page instead of exposing protected content
   }
 });
 
@@ -105,13 +136,19 @@ app.post("/register", async (req, res) => {
   }
 });
 
-// Handling user login using Passport.js local strategy
+// Handling user login using Passport.js LocalStrategy.
+// `passport.authenticate("local", options)` is itself Express middleware: it
+// runs the `verify` function registered below via `passport.use(new Strategy(...))`,
+// and if verification succeeds it calls `req.login()` internally, establishing
+// the session, before redirecting to `successRedirect`.
 app.post("/login", passport.authenticate("local", {
   successRedirect: "/secrets", // Redirect to the secrets page upon successful login
   failureRedirect: "/login", // Redirect back to the login page upon failure
 }));
 
-// Configuring Passport.js to use a local strategy for authentication
+// Configuring Passport.js's LocalStrategy: authenticates using a
+// username/email + password combo supplied via a login form (as opposed to,
+// say, GoogleStrategy which delegates to an external OAuth provider - see practice5).
 passport.use(new Strategy(async function verify(username, password, cb) {
   // 'username' and 'password' are the credentials provided by the user
   // 'cb' is the callback function to return control to Passport after verification
@@ -144,14 +181,17 @@ passport.use(new Strategy(async function verify(username, password, cb) {
   }
 }));
 
-// Serializes user information into the session
+// Serializes user information into the session.
+// (See also Serialization&Deserialization.md in this folder for a deeper dive.)
 passport.serializeUser((user, cb) => {
   // 'user' is the user object from authentication
   // 'cb' is the callback function to pass the serialized user ID to Passport
   cb(null, user.id); // Serialize only the user ID to keep the session lightweight
 });
 
-// Deserializes user information from the session
+// Deserializes user information from the session: takes the ID that was
+// stored in the session cookie's server-side data and looks up the full user
+// record again on each request, attaching it to req.user.
 passport.deserializeUser((id, cb) => {
   // 'id' is the user ID retrieved from the session
   // 'cb' is the callback function to pass the deserialized user object back to Passport

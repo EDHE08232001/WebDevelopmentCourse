@@ -155,3 +155,60 @@ We suggest that you begin by typing:
   cd my-demo-app
   npm start
 ```
+
+---
+
+## Cheat Sheet: Bootstrapping a React App
+
+### Quick Command Reference
+
+| Task | Command | Notes |
+|------|---------|-------|
+| Create a new app (recommended) | `npx create-react-app my-app` | Always fetches the latest `create-react-app`; nothing installed permanently. |
+| Start dev server | `npm start` | Run from inside the project folder; opens `http://localhost:3000` with hot reload. |
+| Build for production | `npm run build` | Outputs a minified, optimized bundle into a `build/` folder, ready to deploy. |
+| Run tests | `npm test` | Launches the test runner (Jest) in interactive watch mode. |
+| Eject config (rarely needed) | `npm run eject` | Irreversible — exposes the hidden Webpack/Babel config for full manual control. |
+
+```bash
+# Full example: scaffold, enter, and start a new app in one go
+npx create-react-app my-app
+cd my-app
+npm start
+```
+
+### Project Structure Overview
+
+After running `npx create-react-app my-app`, you get a project with this shape:
+
+```text
+my-app/
+├── node_modules/        # All installed dependencies (never edit by hand; git-ignored)
+├── public/              # Static assets served as-is, without going through Webpack
+│   ├── index.html       # The single HTML page — React mounts into <div id="root">
+│   └── favicon.ico      # Browser tab icon, plus manifest/robots files, etc.
+├── src/                 # All of your application source code lives here
+│   ├── index.js         # Entry point — renders the root <App /> (or other element) into the DOM
+│   ├── App.js           # Common top-level component (not always present by default)
+│   └── ...               # Additional components, styles, tests, etc.
+├── package.json         # Project metadata, dependencies, and the npm scripts table above
+├── package-lock.json    # Exact locked dependency versions for reproducible installs
+└── .gitignore           # Pre-configured to ignore node_modules/, build/, etc.
+```
+
+Key points:
+
+- **`public/`** files are copied verbatim into the final build — nothing here is processed by Babel or Webpack (with the exception of `index.html`, which gets asset paths injected).
+- **`src/`** is where Babel + Webpack do their work: JSX, ES6+ syntax, CSS imports, and images referenced from JS all get transpiled/bundled from this folder.
+- **`package.json`** is the single source of truth for what commands are available (`scripts`) and what libraries the project depends on (`dependencies` / `devDependencies`) — see this section's `JsxAndBabel/package.json` for a minimal real-world example.
+
+### When to Use `npx` vs a Global `npm install`
+
+| Scenario | Recommended Approach |
+|----------|----------------------|
+| Creating a brand-new project (the common case) | `npx create-react-app my-app` — no install, always latest version. |
+| You run `create-react-app` extremely frequently and want it cached locally | `npm install -g create-react-app`, understanding you must manually keep it updated. |
+| Working in a CI environment or a machine where you can't/shouldn't install global packages | `npx create-react-app my-app` — avoids polluting global state, ideal for ephemeral environments. |
+| Any case where you're unsure | Default to `npx`. It is the officially recommended approach and avoids version-drift bugs entirely. |
+
+In short: **`npx` is the modern default** for one-off or infrequent tool usage (like scaffolding a new app), while a **global `npm install`** only makes sense if you have a strong, specific reason to keep a persistent local copy of the CLI tool.

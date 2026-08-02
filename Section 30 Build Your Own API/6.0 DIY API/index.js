@@ -1,10 +1,21 @@
+// Import the Express framework, used to create the web server and define routes
 import express from "express";
+// Import body-parser, middleware that reads incoming request bodies and
+// makes the parsed data available on req.body
 import bodyParser from "body-parser";
 
+// Create the Express application instance
 const app = express();
+// Port the server will listen on
 const port = 3000;
+// "Secret" key required to authorize the DELETE /all bulk-delete route.
+// In a real app this would be stored securely (env variable/secrets manager),
+// not hard-coded in source.
 const masterKey = "4VGP2DN-6EWM4SJ-N6FGRHV-Z3PR3TT";
 
+// Middleware: parse URL-encoded request bodies (e.g. form submissions) and
+// attach the result to req.body for every incoming request. This must be
+// registered before any route handlers that rely on req.body.
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //1. GET a random joke
@@ -150,20 +161,42 @@ app.delete("/jokes/:id", (req, res) => {
 });
 
 //8. DELETE All jokes
+// Handle DELETE requests to the "/all" endpoint. This is a protected, bulk
+// destructive action, so it requires a matching "key" query parameter
+// before it will wipe the data store.
 app.delete("/all", (req, res) => {
+  // Extract the 'key' query parameter supplied by the caller, e.g.
+  // DELETE /all?key=SOME-KEY
   const userKey = req.query.key;
+
+  // Only allow the deletion if the supplied key matches the masterKey
   if (userKey === masterKey) {
+    // Reset the entire in-memory jokes array to empty
     jokes = [];
+
+    // Respond with 200 OK to indicate all jokes were deleted
     res.sendStatus(200);
   } else {
+    // Respond with 404 (arguably 401/403 would be more semantically correct
+    // for an authorization failure, but this app uses 404) and an error
+    // message when the key does not match
     res.status(404).json({ error: `Your are not authorised to perform this action.` });
   }
 });
 
+// Start the HTTP server and begin listening for incoming requests on `port`.
+// Note: this call happens before `jokes` is declared below, but because
+// `var jokes` is hoisted (and the array is only read once requests come in,
+// which is well after this synchronous script finishes running), the routes
+// above can still safely reference `jokes` at request time.
 app.listen(port, () => {
   console.log(`Successfully started server on port ${port}.`);
 });
 
+// In-memory "database" of jokes. Every route above reads from and/or mutates
+// this array directly (no external database is used), so all data resets
+// whenever the server restarts. Each joke has: id (number), jokeText
+// (string), and jokeType (string, used for filtering in the /filter route).
 var jokes = [
   {
     id: 1,
